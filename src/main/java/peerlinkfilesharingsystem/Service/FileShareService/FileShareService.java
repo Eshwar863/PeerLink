@@ -129,10 +129,15 @@ public class FileShareService {
                 .toUriString();
 
 
-        ShareFileResponse response = new ShareFileResponse(
-                fileShare.getFileName(),
-                shareUrl,
-                fileShare.getShareId());
+        ShareFileResponse response = ShareFileResponse.builder()
+                .fileName(fileShare.getFileName())
+                .fileDownloadUri(shareUrl)
+                .shareport(fileShare.getShareId())
+                .fileSize(fileShare.getFileSize())
+                .fileType(fileShare.getFileType())
+                .expiresAt(fileShare.getShareExpiresAt())
+                .build();
+
         return ResponseEntity.ok(response);
     }
     public ResponseEntity<?> markFileAsPrivate(String transferId) throws FileNotFoundException {
@@ -214,11 +219,17 @@ public class FileShareService {
                 .toUriString();
 
 
-        ShareFileResponse response = new ShareFileResponse(
-                fileShare.getFileName(),
-                shareUrl,
-                fileShare.getShareId());
+        ShareFileResponse response = ShareFileResponse.builder()
+                .fileName(fileShare.getFileName())
+                .fileDownloadUri(shareUrl)
+                .shareport(fileShare.getShareId())
+                .fileSize(fileShare.getFileSize())
+                .fileType(fileShare.getFileType())
+                .expiresAt(fileShare.getShareExpiresAt())
+                .build();
+
         return ResponseEntity.ok(response);
+
     }
 
     public ResponseEntity<?> sendLinkToEmail(EmailFileRequest emailFileRequest ) {
@@ -282,4 +293,68 @@ public class FileShareService {
         }
         return user;
     }
+
+    /**
+     * Get all shared files for the logged-in user
+     * @param limit - Maximum number of files to return (null = all)
+     * @return List of shared file information
+     */
+    public List<ShareFileResponse> getUserSharedFiles(Integer limit) {
+        // Get logged-in user
+        Users user = retriveLoggedInUser();
+
+        log.info("Fetching shared files for user: {}", user.getUsername());
+
+        // Find all PUBLIC files for this user
+        List<FileTransferEntity> userFiles;
+
+        if (limit == null) {
+            // Get all public files for user
+            userFiles = fileTransferRepo.findByUserIdAndMarkFileAs(
+                    user.getId(),
+                    String.valueOf(MarkFileAs.PUBLIC)
+            );
+        } else {
+            // Get limited number of public files
+            userFiles = fileTransferRepo.findByUserIdAndMarkFileAsWithLimit(
+                    user.getId(),
+                    String.valueOf(MarkFileAs.PUBLIC),
+                    limit
+            );
+        }
+
+        // Convert to response DTOs
+        List<ShareFileResponse> responses = new ArrayList<>();
+
+        for (FileTransferEntity file : userFiles) {
+            // Get share info from FileShare table
+            FileShare fileShare = fileShareRepo.findByShareToken(file.getShareToken());
+
+            if (fileShare != null && fileShare.getShareExpiresAt().isAfter(LocalDateTime.now())) {
+                // Build share URL
+                String shareUrl = ServletUriComponentsBuilder
+                        .fromCurrentContextPath()
+                        .path("/files/info/public/")
+                        .path(fileShare.getShareToken())
+                        .toUriString();
+
+                // Create response object
+                ShareFileResponse response = ShareFileResponse.builder()
+                        .fileName(fileShare.getFileName())
+                        .fileDownloadUri(shareUrl)
+                        .shareport(fileShare.getShareId())
+                        .fileSize(fileShare.getFileSize())
+                        .fileType(fileShare.getFileType())
+                        .expiresAt(fileShare.getShareExpiresAt())
+                        .build();
+
+                responses.add(response);
+            }
+        }
+
+        log.info("Found {} shared files for user {}", responses.size(), user.getUsername());
+
+        return responses;
+    }
+
 }

@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import peerlinkfilesharingsystem.Enums.MarkFileAs;
 import peerlinkfilesharingsystem.Model.FileTransferEntity;
 
 import java.io.File;
@@ -43,4 +44,31 @@ public interface FileTransferRepo extends JpaRepository<FileTransferEntity,UUID>
     List<FileTransferEntity> findBySuccessFalseOrStatus(String failed);
 
     List<FileTransferEntity> findByExpiresAtBeforeAndDeletedFalse(LocalDateTime now);
+
+//    List<FileTransferEntity> findByUserIdAndMarkFileAsWithLimit(UUID id, MarkFileAs markFileAs, Integer limit);
+//
+//    List<FileTransferEntity> findByUserIdAndMarkFileAs(UUID id, MarkFileAs markFileAs);
+    @Query(value = "SELECT * FROM file_transfer_entity " +
+            "WHERE user_id = :userId " +
+            "AND mark_file_as = :status " +
+            "AND deleted = false " +
+            "ORDER BY created_at DESC " +
+            "LIMIT :limit",
+            nativeQuery = true)
+    List<FileTransferEntity> findByUserIdAndMarkFileAsWithLimit(
+            @Param("userId") UUID userId,
+            @Param("status") String status,
+            @Param("limit") int limit
+    );
+    @Query(value = "SELECT * FROM file_transfer_entity " +
+            "WHERE user_id = :userId " +
+            "AND mark_file_as = :status " +
+            "AND deleted = false " +
+            "ORDER BY created_at DESC",
+            nativeQuery = true)
+    List<FileTransferEntity> findByUserIdAndMarkFileAs(
+            @Param("userId") UUID userId,
+            @Param("status") String status
+    );
+
 }

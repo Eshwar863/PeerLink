@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import peerlinkfilesharingsystem.Dto.SharedFileResponse;
+import peerlinkfilesharingsystem.Dto.ShareFileResponse;
 import peerlinkfilesharingsystem.Service.FileShareService.FileShareService;
 
 import java.util.List;
@@ -25,13 +25,13 @@ public class FileController {
 
 
     @GetMapping("/my-shares")
-    public ResponseEntity<List<SharedFileResponse>> getMySharedFiles(
+    public ResponseEntity<List<ShareFileResponse>> getMySharedFiles(
             @RequestParam(defaultValue = "10") Integer limit) {
 
         log.info("GET /fileshare/my-shares - Limit: {}", limit);
 
         try {
-            List<SharedFileResponse> sharedFiles = fileShareService.getUserSharedFiles(limit);
+            List<ShareFileResponse> sharedFiles = fileShareService.getUserSharedFiles(limit);
 
             log.info("Returning {} shared files", sharedFiles.size());
 
@@ -42,11 +42,11 @@ public class FileController {
             return ResponseEntity.internalServerError().build();
         }
     } @GetMapping("/my-shares/all")
-    public ResponseEntity<List<SharedFileResponse>> getAllSharedFiles() {
+    public ResponseEntity<List<ShareFileResponse>> getAllSharedFiles() {
         log.info("GET /fileshare/my-shares/all");
 
         try {
-            List<SharedFileResponse> sharedFiles = fileShareService.getUserSharedFiles(null);
+            List<ShareFileResponse> sharedFiles = fileShareService.getUserSharedFiles(null);
             return ResponseEntity.ok(sharedFiles);
 
         } catch (Exception e) {

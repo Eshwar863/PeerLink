@@ -1,28 +1,24 @@
 package peerlinkfilesharingsystem.Dto;
 
-
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Data
-public class ShareFileResponse {
+@Builder  // ✅ Add Builder pattern
+@AllArgsConstructor
+@NoArgsConstructor
+public class ShareFileResponse {  // ✅ Renamed from ShareFileResponse
+
     private String fileName;
-    private Long shareport;
+    private Long shareport;  // Share ID
     private String fileDownloadUri;
 
-    public ShareFileResponse(String fileName, String fileDownloadUri,Long port) {
-        this.fileName = fileName;
-        this.fileDownloadUri = fileDownloadUri;
-        this.shareport = port;
-    }
-
-    public Long getPort() {
-        return shareport;
-    }
-    public String getFileName() {
-        return fileName;
-    }
-
-    public String getFileDownloadUri() {
-        return fileDownloadUri;
-    }
+    // Additional fields for better response
+    private Long fileSize;
+    private String fileType;
+    private LocalDateTime expiresAt;
 }

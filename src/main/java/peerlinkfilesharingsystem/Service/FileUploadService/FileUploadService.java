@@ -33,7 +33,7 @@ public class FileUploadService {
     private String uploadDirectory;
 
     private FileTransferRepo fileTransferRepo;
-    private IntelligencePredictionService intelligencePredictionService;
+    public IntelligencePredictionService intelligencePredictionService;
     private FileCompressionService compressionService;
     private IntelligentModelParametersRepo intelligentModelParametersRepo;
     private UserRepo userRepo;
@@ -271,7 +271,7 @@ public class FileUploadService {
         }
     }
 
-    private String extractFileType(String fileName) {
+    public String extractFileType(String fileName) {
         if (fileName != null && fileName.contains(".")) {
             return fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
         }

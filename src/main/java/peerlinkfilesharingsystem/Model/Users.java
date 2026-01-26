@@ -22,7 +22,7 @@ public class Users {
     private String password;
     @Column(unique = true, nullable = false)
     private String email;
-    private String LastIpAddress;
+    private String lastIpAddress;
     private UserRole role;
 //    @OneToOne(mappedBy = "users")
 //    private Otp otp;

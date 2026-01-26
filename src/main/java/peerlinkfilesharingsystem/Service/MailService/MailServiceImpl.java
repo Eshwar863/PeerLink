@@ -165,7 +165,7 @@ public class MailServiceImpl implements MailService {
         String htmlContent = "<html><body>" +
                 "<h2>Your File is Ready</h2>" +
                 "<p><strong>File:</strong> " + response.getFileName() + "</p>" +
-                "<p><strong>Share ID:</strong> " + response.getPort() + "</p>" +
+                "<p><strong>Share ID:</strong> " + response.getShareport() + "</p>" +
                 "<p><strong>Download Link:</strong> <a href='" + response.getFileDownloadUri() + "'>Click Here</a></p>" +
                 "</body></html>";
         try {
