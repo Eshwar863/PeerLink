@@ -17,6 +17,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import peerlinkfilesharingsystem.Service.UserService.UserPrincipleService;
 
 import java.util.Arrays;
@@ -44,6 +46,7 @@ public class SecurityConfig {
                     request.requestMatchers("/api/mail/**").permitAll();
                     request.requestMatchers("/files/info/public/**").permitAll();
                     request.requestMatchers("/files/download/*/public").permitAll();
+                    request.requestMatchers("/files/chunked/sessions").permitAll();
                     request.requestMatchers("/api/mail/forgotpassword").authenticated();
                     request.anyRequest().authenticated();
                 })
@@ -106,6 +109,21 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;
+    }
+
+
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/files/**")
+                        .allowedOrigins("*")
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                        .allowedHeaders("*")
+                        .maxAge(3600);
+            }
+        };
     }
 
 }

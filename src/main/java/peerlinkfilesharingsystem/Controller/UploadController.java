@@ -13,7 +13,7 @@ import peerlinkfilesharingsystem.Service.FileUploadService.FileUploadService;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/files")
+@RequestMapping("/files/v1")
 @Slf4j
 public class UploadController {
 

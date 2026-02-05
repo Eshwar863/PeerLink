@@ -10,13 +10,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import peerlinkfilesharingsystem.Dto.FileShareDownloadDTO;
 import peerlinkfilesharingsystem.Enums.MarkFileAs;
-import peerlinkfilesharingsystem.Exception.UnauthorizedFileAccessException;
 import peerlinkfilesharingsystem.Model.*;
 import peerlinkfilesharingsystem.Repo.FileDownloadRepo;
 import peerlinkfilesharingsystem.Repo.FileShareRepo;
 import peerlinkfilesharingsystem.Repo.FileTransferRepo;
 import peerlinkfilesharingsystem.Repo.UserRepo;
-import peerlinkfilesharingsystem.Service.FileStorageService.FileStorageService;
+import peerlinkfilesharingsystem.Service.FileStorageService.FilesStorageService;
 import peerlinkfilesharingsystem.Service.IntelligencePredictionService.IntelligencePredictionService;
 
 import java.io.*;
@@ -30,7 +29,7 @@ public class FileDownloadService {
 
     private final FileDownloadRepo fileDownloadRepo;
     private final FileShareRepo fileShareRepo;
-    private final FileStorageService fileStorageService;
+    private final FilesStorageService filesStorageService;
     private FileTransferRepo fileTransferRepo;
     private IntelligencePredictionService intelligencePredictionService;
     private UserRepo userRepo;
@@ -41,12 +40,12 @@ public class FileDownloadService {
     public FileDownloadService(
             FileTransferRepo fileTransferRepo,
             UserRepo userRepo,
-            IntelligencePredictionService intelligencePredictionService, FileDownloadRepo fileDownloadRepo, FileShareRepo fileShareRepo, FileStorageService fileStorageService) {
+            IntelligencePredictionService intelligencePredictionService, FileDownloadRepo fileDownloadRepo, FileShareRepo fileShareRepo, FilesStorageService filesStorageService) {
         this.fileTransferRepo = fileTransferRepo;
         this.intelligencePredictionService = intelligencePredictionService;
         this.fileDownloadRepo = fileDownloadRepo;
         this.fileShareRepo = fileShareRepo;
-        this.fileStorageService = fileStorageService;
+        this.filesStorageService = filesStorageService;
         this.userRepo = userRepo;
     }
 

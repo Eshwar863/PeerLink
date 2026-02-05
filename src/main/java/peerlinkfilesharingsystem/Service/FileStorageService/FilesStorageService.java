@@ -17,14 +17,14 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class FileStorageService {
+public class FilesStorageService {
 
     private final FileTransferRepo fileTransferRepo;
     private final DeletedFilesRepo deletedFilesRepo;
     @Value("${file.storage.path:./uploads}")
     private String baseUploadDirectory;
 
-    public FileStorageService(FileTransferRepo fileTransferRepo, DeletedFilesRepo deletedFilesRepo) {
+    public FilesStorageService(FileTransferRepo fileTransferRepo, DeletedFilesRepo deletedFilesRepo) {
         this.fileTransferRepo = fileTransferRepo;
         this.deletedFilesRepo = deletedFilesRepo;
     }

@@ -3,16 +3,16 @@ package peerlinkfilesharingsystem.Controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.RestController;
-import peerlinkfilesharingsystem.Service.FileStorageService.FileStorageService;
+import peerlinkfilesharingsystem.Service.FileStorageService.FilesStorageService;
 
 @RestController
 @Slf4j
 public class FileCleanUp {
 
-    private final FileStorageService fileDownloadService;
+    private final FilesStorageService fileDownloadService;
 
-    public FileCleanUp(FileStorageService fileStorageService) {
-        this.fileDownloadService = fileStorageService;
+    public FileCleanUp(FilesStorageService filesStorageService) {
+        this.fileDownloadService = filesStorageService;
     }
 
 //        @Scheduled(cron = "0 * * * * *")

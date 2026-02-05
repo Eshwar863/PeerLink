@@ -16,7 +16,7 @@ import peerlinkfilesharingsystem.Repo.FileTransferRepo;
 import peerlinkfilesharingsystem.Repo.IntelligentModelParametersRepo;
 import peerlinkfilesharingsystem.Repo.UserRepo;
 import peerlinkfilesharingsystem.Service.CompressionService.FileCompressionService;
-import peerlinkfilesharingsystem.Service.FileStorageService.FileStorageService;
+import peerlinkfilesharingsystem.Service.FileStorageService.FilesStorageService;
 import peerlinkfilesharingsystem.Service.IntelligencePredictionService.IntelligencePredictionService;
 
 import java.io.*;
@@ -28,7 +28,7 @@ import java.util.Optional;
 @Slf4j
 public class FileUploadService {
 
-    private final FileStorageService fileStorageService;
+    private final FilesStorageService filesStorageService;
     @Value("${file.storage.path:./uploads}")
     private String uploadDirectory;
 
@@ -42,7 +42,7 @@ public class FileUploadService {
     public FileUploadService(FileTransferRepo fileTransferRepo,
                              IntelligencePredictionService intelligencePredictionService,
                              FileCompressionService fileCompressionService,
-                             IntelligentModelParametersRepo intelligentModelParametersRepo, FileStorageService fileStorageService,
+                             IntelligentModelParametersRepo intelligentModelParametersRepo, FilesStorageService filesStorageService,
                              UserRepo userRepo
 
                              ) {
@@ -50,7 +50,7 @@ public class FileUploadService {
         this.intelligencePredictionService = intelligencePredictionService;
         this.compressionService = fileCompressionService;
         this.intelligentModelParametersRepo = intelligentModelParametersRepo;
-        this.fileStorageService = fileStorageService;
+        this.filesStorageService = filesStorageService;
         this.userRepo = userRepo;
 
     }
@@ -98,8 +98,8 @@ public class FileUploadService {
             fileTransferEntity.setCompressionLevel(params.getCompressionLevel());
             fileTransferEntity.setChunkSize(params.getChunkSize());
 
-            String Userpath  = fileStorageService.createUserDirectory(String.valueOf(fileTransferEntity.getUserId()));
-            if (fileStorageService.validateUserAccess(users.getId().toString(),Userpath)) {
+            String Userpath  = filesStorageService.createUserDirectory(String.valueOf(fileTransferEntity.getUserId()));
+            if (filesStorageService.validateUserAccess(users.getId().toString(),Userpath)) {
                 fileTransferRepo.save(fileTransferEntity);
 
                 log.info("Starting compression process..." + Userpath);

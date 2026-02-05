@@ -21,7 +21,7 @@ import peerlinkfilesharingsystem.Model.Users;
 import peerlinkfilesharingsystem.Repo.FileShareRepo;
 import peerlinkfilesharingsystem.Repo.FileTransferRepo;
 import peerlinkfilesharingsystem.Repo.UserRepo;
-import peerlinkfilesharingsystem.Service.FileStorageService.FileStorageService;
+import peerlinkfilesharingsystem.Service.FileStorageService.FilesStorageService;
 import peerlinkfilesharingsystem.Service.MailService.MailService;
 
 import java.io.FileNotFoundException;
@@ -35,15 +35,15 @@ public class FileShareService {
     private final FileTransferRepo fileTransferRepo;
     private final FileShareRepo fileShareRepo;
     private final SecurityConfig config;
-    private final FileStorageService fileStorageService;
+    private final FilesStorageService filesStorageService;
     private final MailService mailService;
     private final UserRepo userRepo;
 
-    public FileShareService(FileTransferRepo fileTransferRepo, FileShareRepo fileShareRepo, SecurityConfig config, FileStorageService fileStorageService, FileStorageService fileStorageService1, MailService mailService1,UserRepo userRepo) {
+    public FileShareService(FileTransferRepo fileTransferRepo, FileShareRepo fileShareRepo, SecurityConfig config, FilesStorageService filesStorageService, FilesStorageService filesStorageService1, MailService mailService1, UserRepo userRepo) {
         this.fileTransferRepo = fileTransferRepo;
         this.fileShareRepo = fileShareRepo;
         this.config = config;
-        this.fileStorageService = fileStorageService1;
+        this.filesStorageService = filesStorageService1;
         this.mailService = mailService1;
         this.userRepo = userRepo;
     }
@@ -60,7 +60,7 @@ public class FileShareService {
         Users users = retriveLoggedInUser();
 
         try {
-            fileStorageService.validateUserAccess(users.getId().toString(), fileTransferEntity.getStoragePath());
+            filesStorageService.validateUserAccess(users.getId().toString(), fileTransferEntity.getStoragePath());
         } catch (UnauthorizedFileAccessException ex) {
             return new ResponseEntity<>("Invalid Access", HttpStatus.UNAUTHORIZED);
         }
@@ -101,7 +101,7 @@ public class FileShareService {
             return ResponseEntity.status(404).body("File not found");
         }
         try {
-            fileStorageService.validateUserAccess(users.getId().toString(), fileOpt.get().getStoragePath());
+            filesStorageService.validateUserAccess(users.getId().toString(), fileOpt.get().getStoragePath());
         } catch (UnauthorizedFileAccessException ex) {
             return new ResponseEntity<>("Invalid Access", HttpStatus.UNAUTHORIZED);
         }
@@ -151,7 +151,7 @@ public class FileShareService {
                 );
         System.out.println(fileTransferEntity.getStoragePath());
         try {
-            fileStorageService.validateUserAccess(users.getId().toString(), fileTransferEntity.getStoragePath());
+            filesStorageService.validateUserAccess(users.getId().toString(), fileTransferEntity.getStoragePath());
         } catch (UnauthorizedFileAccessException ex) {
             return new ResponseEntity<>("Invalid Access", HttpStatus.UNAUTHORIZED);
         }
@@ -191,7 +191,7 @@ public class FileShareService {
             return ResponseEntity.status(404).body("File not found");
         }
         try {
-            fileStorageService.validateUserAccess(users.getId().toString(), fileOpt.get().getStoragePath());
+            filesStorageService.validateUserAccess(users.getId().toString(), fileOpt.get().getStoragePath());
         } catch (UnauthorizedFileAccessException ex) {
             return new ResponseEntity<>("Invalid Access", HttpStatus.UNAUTHORIZED);
         }
@@ -270,7 +270,7 @@ public class FileShareService {
                         "File transfer not found with ID: " + transferId)
                 );
         try {
-            fileStorageService.validateUserAccess(users.getId().toString(), fileTransferEntity.getStoragePath());
+            filesStorageService.validateUserAccess(users.getId().toString(), fileTransferEntity.getStoragePath());
         } catch (UnauthorizedFileAccessException ex) {
             return new ResponseEntity<>("Invalid Access", HttpStatus.UNAUTHORIZED);
         }
